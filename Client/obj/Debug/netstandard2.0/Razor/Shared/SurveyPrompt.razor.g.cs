@@ -9,41 +9,55 @@ namespace SpotIt.Client.Shared
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
+#nullable restore
 #line 1 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using System.Net.Http;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 2 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 3 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 4 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 5 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.JSInterop;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 6 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using SpotIt.Client;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 7 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using SpotIt.Client.Shared;
 
 #line default
 #line hidden
+#nullable disable
     public class SurveyPrompt : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -55,11 +69,13 @@ using SpotIt.Client.Shared;
             __builder.AddMarkupContent(3, "\r\n    <span class=\"oi oi-pencil mr-2\" aria-hidden=\"true\"></span>\r\n    ");
             __builder.OpenElement(4, "strong");
             __builder.AddContent(5, 
+#nullable restore
 #line 3 "C:\tiago\blazor\SpotIt\Client\Shared\SurveyPrompt.razor"
              Title
 
 #line default
 #line hidden
+#nullable disable
             );
             __builder.CloseElement();
             __builder.AddMarkupContent(6, "\r\n\r\n    ");
@@ -67,6 +83,7 @@ using SpotIt.Client.Shared;
             __builder.CloseElement();
         }
         #pragma warning restore 1998
+#nullable restore
 #line 12 "C:\tiago\blazor\SpotIt\Client\Shared\SurveyPrompt.razor"
        
     // Demonstrates how a parent component can supply parameters
@@ -74,6 +91,7 @@ using SpotIt.Client.Shared;
 
 #line default
 #line hidden
+#nullable disable
     }
 }
 #pragma warning restore 1591

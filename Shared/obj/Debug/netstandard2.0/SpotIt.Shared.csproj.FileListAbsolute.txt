@@ -5,4 +5,3 @@ C:\tiago\blazor\SpotIt\Shared\obj\Debug\netstandard2.0\SpotIt.Shared.AssemblyInf
 C:\tiago\blazor\SpotIt\Shared\obj\Debug\netstandard2.0\SpotIt.Shared.AssemblyInfo.cs
 C:\tiago\blazor\SpotIt\Shared\obj\Debug\netstandard2.0\SpotIt.Shared.dll
 C:\tiago\blazor\SpotIt\Shared\obj\Debug\netstandard2.0\SpotIt.Shared.pdb
-C:\tiago\blazor\SpotIt\Shared\obj\Debug\netstandard2.0\SpotIt.Shared.csprojAssemblyReference.cache

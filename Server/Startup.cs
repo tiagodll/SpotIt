@@ -1,10 +1,11 @@
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json.Serialization;
-using System.Linq;
+using SpotIt.Server.Controllers;
 using SpotIt.Shared;
 
 namespace SpotIt.Server
@@ -19,11 +20,14 @@ namespace SpotIt.Server
             services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                    new[] { "application/octet-stream" });
+                    new[] {"application/octet-stream"});
             });
 
             var inMemoryDb = new InMemoryDb();
             services.AddSingleton(inMemoryDb);
+
+            services.AddSignalR();
+            services.AddTransient<HubConnectionBuilder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +50,7 @@ namespace SpotIt.Server
             {
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapFallbackToClientSideBlazor<Client.Startup>("index.html");
+                endpoints.MapHub<GameHub>("/hub");
             });
         }
     }

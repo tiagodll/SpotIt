@@ -9,41 +9,55 @@ namespace SpotIt.Client.Shared
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
+#nullable restore
 #line 1 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using System.Net.Http;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 2 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 3 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 4 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 5 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.JSInterop;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 6 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using SpotIt.Client;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 7 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using SpotIt.Client.Shared;
 
 #line default
 #line hidden
+#nullable disable
     public class NavMenu : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -56,11 +70,13 @@ using SpotIt.Client.Shared;
             __builder.OpenElement(4, "button");
             __builder.AddAttribute(5, "class", "navbar-toggler");
             __builder.AddAttribute(6, "onclick", Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, 
+#nullable restore
 #line 3 "C:\tiago\blazor\SpotIt\Client\Shared\NavMenu.razor"
                                              ToggleNavMenu
 
 #line default
 #line hidden
+#nullable disable
             ));
             __builder.AddMarkupContent(7, "\r\n        <span class=\"navbar-toggler-icon\"></span>\r\n    ");
             __builder.CloseElement();
@@ -69,34 +85,42 @@ using SpotIt.Client.Shared;
             __builder.AddMarkupContent(9, "\r\n\r\n");
             __builder.OpenElement(10, "div");
             __builder.AddAttribute(11, "class", 
+#nullable restore
 #line 8 "C:\tiago\blazor\SpotIt\Client\Shared\NavMenu.razor"
              NavMenuCssClass
 
 #line default
 #line hidden
+#nullable disable
             );
             __builder.AddAttribute(12, "onclick", Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, 
+#nullable restore
 #line 8 "C:\tiago\blazor\SpotIt\Client\Shared\NavMenu.razor"
                                         ToggleNavMenu
 
 #line default
 #line hidden
+#nullable disable
             ));
             __builder.AddMarkupContent(13, "\r\n    ");
             __builder.OpenElement(14, "div");
             __builder.AddAttribute(15, "class", 
+#nullable restore
 #line 9 "C:\tiago\blazor\SpotIt\Client\Shared\NavMenu.razor"
                  NavMenuCssClass
 
 #line default
 #line hidden
+#nullable disable
             );
             __builder.AddAttribute(16, "onclick", Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, 
+#nullable restore
 #line 9 "C:\tiago\blazor\SpotIt\Client\Shared\NavMenu.razor"
                                             ToggleNavMenu
 
 #line default
 #line hidden
+#nullable disable
             ));
             __builder.AddMarkupContent(17, "\r\n            ");
             __builder.OpenElement(18, "ul");
@@ -109,11 +133,13 @@ using SpotIt.Client.Shared;
             __builder.AddAttribute(25, "class", "nav-link");
             __builder.AddAttribute(26, "href", "");
             __builder.AddAttribute(27, "Match", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<Microsoft.AspNetCore.Components.Routing.NavLinkMatch>(
+#nullable restore
 #line 12 "C:\tiago\blazor\SpotIt\Client\Shared\NavMenu.razor"
                                                              NavLinkMatch.All
 
 #line default
 #line hidden
+#nullable disable
             ));
             __builder.AddAttribute(28, "ChildContent", (Microsoft.AspNetCore.Components.RenderFragment)((__builder2) => {
                 __builder2.AddMarkupContent(29, "\r\n                        <span class=\"oi oi-home\" aria-hidden=\"true\"></span> Home\r\n                    ");
@@ -158,6 +184,7 @@ using SpotIt.Client.Shared;
             __builder.CloseElement();
         }
         #pragma warning restore 1998
+#nullable restore
 #line 30 "C:\tiago\blazor\SpotIt\Client\Shared\NavMenu.razor"
        
     bool collapseNavMenu = true;
@@ -171,6 +198,7 @@ using SpotIt.Client.Shared;
 
 #line default
 #line hidden
+#nullable disable
     }
 }
 #pragma warning restore 1591

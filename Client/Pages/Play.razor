@@ -1,6 +1,9 @@
 ﻿@page "/play/{gameId}"
+@using BlazorSignalR
+@using Microsoft.AspNetCore.SignalR.Client
 @using SpotIt.Shared
-@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 
 <h1>Game</h1>
 
@@ -10,19 +13,20 @@
 {
     <GameList></GameList>
 }
-else if (game.State == Game.GameState.Created)
+else if (this.State == Game.GameState.Created)
 {
     <p>Enter your name</p>
     <input type="text" @bind="user" />
     <button @onclick="@JoinGame">join</button>
 }
-else if(game.State == Game.GameState.Joined || game.State == Game.GameState.Started)
+else if (this.State == Game.GameState.Joined || this.State == Game.GameState.Started)
 {
     <p>Current game: @gameId</p>
 
     <button class="btn btn-danger" @onclick="Protest">Protest!!!</button>
     <button class="btn btn-primary" @onclick="SelectItem">1</button>
-}else if (game.State == Game.GameState.Finished)
+}
+else if (this.State == Game.GameState.Finished)
 {
     <p>Game over</p>
 }
@@ -34,13 +38,20 @@ else if(game.State == Game.GameState.Joined || game.State == Game.GameState.Star
 
     public string user { get; set; }
 
+    public Game.GameState State { get; set; }
     public Game game;
+    HubConnection _connection;
 
     protected override async Task OnInitializedAsync()
     {
+        _connection = new HubConnectionBuilder().WithUrlBlazor("/hub", JsRuntime, NavigationManager, options: opt => { }).Build();
+        _connection.On<Game>("Refresh", GameLoaded);
+        await _connection.StartAsync();
+
         if (!string.IsNullOrWhiteSpace(gameId))
         {
-            game = await Http.GetJsonAsync<Game>("api/game/" + gameId);
+            await _connection.InvokeAsync<Game>("LoadGame", gameId);
+            this.State = Game.GameState.Created;
         }
     }
 
@@ -54,10 +65,20 @@ else if(game.State == Game.GameState.Joined || game.State == Game.GameState.Star
 
     private async Task JoinGame()
     {
-        await Http.SendJsonAsync(HttpMethod.Post, $"/api/game/{gameId}/join", user);
-        game = await Http.GetJsonAsync<Game>("api/game/" + gameId);
-        game.State = Game.GameState.Joined;
+        await _connection.InvokeAsync<Game>("JoinGame", this.game.Id, user);
+
+        //await Http.SendJsonAsync(HttpMethod.Post, $"/api/game/{gameId}/join", user);
+        //game = await Http.GetJsonAsync<Game>("api/game/" + gameId);
+        this.State = Game.GameState.Joined;
 
         Console.WriteLine(game);
+    }
+    protected async Task GameLoaded(Game game)
+    {
+        this.game = game;
+        if (game.State == Game.GameState.Started || game.State == Game.GameState.Finished)
+            this.State = game.State;
+
+        StateHasChanged();
     }
 }

@@ -1,59 +1,101 @@
 @page "/host"
 @page "/host/{gameId}"
+@using BlazorSignalR
+@using Microsoft.AspNetCore.SignalR.Client
 @using SpotIt.Shared
-@inject HttpClient Http
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 
 @if (string.IsNullOrWhiteSpace(gameId))
 {
     <p>Creating new game...</p>
 }
-else if (this.game == null)
+else if (game == null)
 {
     <p>Loading game...</p>
 }
-else
+else if (game.State == Game.GameState.Created)
 {
     <p>This is the room number: @game.Id .</p>
     <p>Open <a href="@GameUrl">@GameUrl</a> in your mobile and start playing</p>
 
     <p>Current players:</p>
     <ul>
-     @foreach (var player in this.game?.Players)
-    {
-    <li>@player</li>
-    }
-</ul>
+        @foreach (var player in game?.Players)
+        {
+            <li>@player</li>
+        }
+    </ul>
+    <button @onclick="@StartGame">start game</button>
+}
+else if (game.State == Game.GameState.Started)
+{
+    <p>This is the room number: @game.Id .</p>
+
+    <p>players:</p>
+    <ul>
+        @foreach (var player in game?.Players)
+        {
+            <li>@player</li>
+        }
+    </ul>
+    <button @onclick="@EndGame">Start Game</button>
+}
+else if (game.State == Game.GameState.Finished)
+{
+    <p>This is the room number: @game.Id .</p>
+    <p>Game is finished</p>
+
+    <p>Current players:</p>
+    <ul>
+        @foreach (var player in game?.Players)
+        {
+            <li>@player</li>
+        }
+    </ul>
+    <button @onclick="@FinishGame">Finish Game</button>
 }
 
 @code {
+
     [Parameter]
     public string gameId { get; set; }
+
+    private HubConnection _connection;
 
     Game game;
     string GameUrl => $"{NavigationManager.BaseUri}play/{game.Id}";
 
     protected override async Task OnInitializedAsync()
     {
+        _connection = new HubConnectionBuilder().WithUrlBlazor("/hub", JsRuntime, NavigationManager, options: opt => { }).Build();
+        _connection.On<Game>("Refresh", GameLoaded);
+        await _connection.StartAsync();
+
         if (string.IsNullOrWhiteSpace(gameId))
         {
             game = new Game();
-            await Http.SendJsonAsync(HttpMethod.Post, "/api/game", this.game);
-            gameId = this.game.Id;
-            Console.WriteLine($"play/{gameId}");
+            await _connection.InvokeAsync<Game>("CreateGame", game);
+            gameId = game.Id;
+
             NavigationManager.NavigateTo($"host/{gameId}");
         }
-        LoadGame(gameId);
+        game = await _connection.InvokeAsync<Game>("LoadGame", gameId);
     }
 
-    protected async Task LoadGame(string gameId)
+    protected async Task GameLoaded(Game game)
     {
-        if (!string.IsNullOrWhiteSpace(gameId))
-        {
-            Console.WriteLine($"loading game {gameId}");
-            this.game = await Http.GetJsonAsync<Game>($"api/game/{gameId}");
-            StateHasChanged();
-            Console.WriteLine($"game {game.Id} loaded");
-        }
+        this.game = game;
+        StateHasChanged();
+    }
+
+    protected async void StartGame()
+    {
+        await _connection.InvokeAsync<Game>("StartGame", game.Id);
+    }
+
+    protected async void FinishGame()
+    {
+        await _connection.InvokeAsync<Game>("FinishGame", game.Id);
     }
 }

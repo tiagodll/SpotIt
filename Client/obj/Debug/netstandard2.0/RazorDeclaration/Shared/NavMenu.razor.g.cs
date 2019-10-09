@@ -13,41 +13,55 @@ namespace SpotIt.Client.Shared
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
+#nullable restore
 #line 1 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using System.Net.Http;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 2 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 3 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 4 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 5 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.JSInterop;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 6 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using SpotIt.Client;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 7 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using SpotIt.Client.Shared;
 
 #line default
 #line hidden
+#nullable disable
     public class NavMenu : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -55,6 +69,7 @@ using SpotIt.Client.Shared;
         {
         }
         #pragma warning restore 1998
+#nullable restore
 #line 30 "C:\tiago\blazor\SpotIt\Client\Shared\NavMenu.razor"
        
     bool collapseNavMenu = true;
@@ -68,6 +83,7 @@ using SpotIt.Client.Shared;
 
 #line default
 #line hidden
+#nullable disable
     }
 }
 #pragma warning restore 1591

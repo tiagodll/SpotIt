@@ -9,41 +9,55 @@ namespace SpotIt.Client
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
+#nullable restore
 #line 1 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using System.Net.Http;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 2 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 3 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 4 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 5 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using Microsoft.JSInterop;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 6 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using SpotIt.Client;
 
 #line default
 #line hidden
+#nullable disable
+#nullable restore
 #line 7 "C:\tiago\blazor\SpotIt\Client\_Imports.razor"
 using SpotIt.Client.Shared;
 
 #line default
 #line hidden
+#nullable disable
     public class App : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -51,28 +65,34 @@ using SpotIt.Client.Shared;
         {
             __builder.OpenComponent<Microsoft.AspNetCore.Components.Routing.Router>(0);
             __builder.AddAttribute(1, "AppAssembly", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<System.Reflection.Assembly>(
+#nullable restore
 #line 1 "C:\tiago\blazor\SpotIt\Client\App.razor"
                       typeof(Program).Assembly
 
 #line default
 #line hidden
+#nullable disable
             ));
             __builder.AddAttribute(2, "Found", (Microsoft.AspNetCore.Components.RenderFragment<Microsoft.AspNetCore.Components.RouteData>)((routeData) => (__builder2) => {
                 __builder2.AddMarkupContent(3, "\r\n        ");
                 __builder2.OpenComponent<Microsoft.AspNetCore.Components.RouteView>(4);
                 __builder2.AddAttribute(5, "RouteData", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<Microsoft.AspNetCore.Components.RouteData>(
+#nullable restore
 #line 3 "C:\tiago\blazor\SpotIt\Client\App.razor"
                                routeData
 
 #line default
 #line hidden
+#nullable disable
                 ));
                 __builder2.AddAttribute(6, "DefaultLayout", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<System.Type>(
+#nullable restore
 #line 3 "C:\tiago\blazor\SpotIt\Client\App.razor"
                                                           typeof(MainLayout)
 
 #line default
 #line hidden
+#nullable disable
                 ));
                 __builder2.CloseComponent();
                 __builder2.AddMarkupContent(7, "\r\n    ");
@@ -82,11 +102,13 @@ using SpotIt.Client.Shared;
                 __builder2.AddMarkupContent(9, "\r\n        ");
                 __builder2.OpenComponent<Microsoft.AspNetCore.Components.LayoutView>(10);
                 __builder2.AddAttribute(11, "Layout", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<System.Type>(
+#nullable restore
 #line 6 "C:\tiago\blazor\SpotIt\Client\App.razor"
                              typeof(MainLayout)
 
 #line default
 #line hidden
+#nullable disable
                 ));
                 __builder2.AddAttribute(12, "ChildContent", (Microsoft.AspNetCore.Components.RenderFragment)((__builder3) => {
                     __builder3.AddMarkupContent(13, "\r\n            ");
