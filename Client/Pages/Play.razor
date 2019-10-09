@@ -1,0 +1,63 @@
+﻿@page "/play/{gameId}"
+@using SpotIt.Shared
+@inject HttpClient Http
+
+<h1>Game</h1>
+
+<p>Current game: @gameId</p>
+
+@if (gameId == null || game == null)
+{
+    <GameList></GameList>
+}
+else if (game.State == Game.GameState.Created)
+{
+    <p>Enter your name</p>
+    <input type="text" @bind="user" />
+    <button @onclick="@JoinGame">join</button>
+}
+else if(game.State == Game.GameState.Joined || game.State == Game.GameState.Started)
+{
+    <p>Current game: @gameId</p>
+
+    <button class="btn btn-danger" @onclick="Protest">Protest!!!</button>
+    <button class="btn btn-primary" @onclick="SelectItem">1</button>
+}else if (game.State == Game.GameState.Finished)
+{
+    <p>Game over</p>
+}
+
+@code {
+
+    [Parameter]
+    public string gameId { get; set; }
+
+    public string user { get; set; }
+
+    public Game game;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrWhiteSpace(gameId))
+        {
+            game = await Http.GetJsonAsync<Game>("api/game/" + gameId);
+        }
+    }
+
+    void Protest()
+    {
+    }
+
+    void SelectItem()
+    {
+    }
+
+    private async Task JoinGame()
+    {
+        await Http.SendJsonAsync(HttpMethod.Post, $"/api/game/{gameId}/join", user);
+        game = await Http.GetJsonAsync<Game>("api/game/" + gameId);
+        game.State = Game.GameState.Joined;
+
+        Console.WriteLine(game);
+    }
+}

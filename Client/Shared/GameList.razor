@@ -1,0 +1,31 @@
+﻿@using Microsoft.Extensions.Primitives
+@using SpotIt.Shared
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h3>GameList</h3>
+@if (games == null || games.Count == 0)
+{
+    <p>No games yet.</p>
+}
+else
+{
+    <ul>
+        @foreach (var game in games)
+        {
+            <li><a href="@GameUrl(game)">@GameUrl(game)</a></li>
+        }
+    </ul>
+}
+
+@code {
+    public List<Game> games { get; set; }
+    public string Asd { get; set; }
+
+    public string GameUrl(SpotIt.Shared.Game game) => $"{NavigationManager.BaseUri}play/{game.Id}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        games = await Http.GetJsonAsync<List<Game>>("api/game");
+    }
+}

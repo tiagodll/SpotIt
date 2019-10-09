@@ -1,0 +1,59 @@
+@page "/host"
+@page "/host/{gameId}"
+@using SpotIt.Shared
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+@if (string.IsNullOrWhiteSpace(gameId))
+{
+    <p>Creating new game...</p>
+}
+else if (this.game == null)
+{
+    <p>Loading game...</p>
+}
+else
+{
+    <p>This is the room number: @game.Id .</p>
+    <p>Open <a href="@GameUrl">@GameUrl</a> in your mobile and start playing</p>
+
+    <p>Current players:</p>
+    <ul>
+     @foreach (var player in this.game?.Players)
+    {
+    <li>@player</li>
+    }
+</ul>
+}
+
+@code {
+    [Parameter]
+    public string gameId { get; set; }
+
+    Game game;
+    string GameUrl => $"{NavigationManager.BaseUri}play/{game.Id}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrWhiteSpace(gameId))
+        {
+            game = new Game();
+            await Http.SendJsonAsync(HttpMethod.Post, "/api/game", this.game);
+            gameId = this.game.Id;
+            Console.WriteLine($"play/{gameId}");
+            NavigationManager.NavigateTo($"host/{gameId}");
+        }
+        LoadGame(gameId);
+    }
+
+    protected async Task LoadGame(string gameId)
+    {
+        if (!string.IsNullOrWhiteSpace(gameId))
+        {
+            Console.WriteLine($"loading game {gameId}");
+            this.game = await Http.GetJsonAsync<Game>($"api/game/{gameId}");
+            StateHasChanged();
+            Console.WriteLine($"game {game.Id} loaded");
+        }
+    }
+}
