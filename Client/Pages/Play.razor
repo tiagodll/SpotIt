@@ -1,70 +1,77 @@
 ﻿@page "/play/{gameId}"
+@using System.Threading
 @using BlazorSignalR
 @using Microsoft.AspNetCore.SignalR.Client
 @using SpotIt.Shared
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime
 
-<h1>Game</h1>
+    @if (overlay)
+    {
+        <div class="loading-overlay"></div>
+    }
 
-<p>Current game: @gameId</p>
+    <h1>Game</h1>
 
-@if (gameId == null || game == null)
-{
-    <p>Do you want to host your own game?</p>
-}
-else if (game.State == Game.GameState.Created && this.player == null)
-{
-    <p>Enter your name</p>
-    <input type="text" @bind="name" />
-    <button @onclick="@JoinGame">join</button>
-}
-else if (game.State == Game.GameState.Created && this.player != null)
-{
-    <p>Waiting for game to start</p>
-    <p>players:</p>
-    <ul>
-        @foreach (var player in game?.Players)
-        {
-            <li>@player.Name</li>
-        }
-    </ul>
-}
-else if (game.State == Game.GameState.Started)
-{
     <p>Current game: @gameId</p>
 
-    <p>Cards:</p>
-    <ul>
-        @foreach (var item in player.Cards.Last().items)
+    @if (gameId == null || game == null)
+    {
+        <p>Do you want to host your own game?</p>
+    }
+    else if (game.State == Game.GameState.Created && this.player == null)
+    {
+        <p>Enter your name</p>
+        <input type="text" @bind="name" />
+        <button @onclick="@JoinGame">join</button>
+    }
+    else if (game.State == Game.GameState.Created && this.player != null)
+    {
+        <p>Waiting for game to start</p>
+        <p>players:</p>
+        <ul>
+            @foreach (var player in game?.Players)
+            {
+                <li>@player.Name</li>
+            }
+        </ul>
+    }
+    else if (game.State == Game.GameState.Started)
+    {
+        <p>Current game: @gameId</p>
+
+        <p>Cards:</p>
+        <ul>
+            @foreach (var item in player.Cards.Last().items)
+            {
+                <li>
+                    <button @onclick="@(e => PlayCard(item))">@item</button>
+                </li>
+            }
+        </ul>
+
+        <button class="btn btn-danger" @onclick="Protest">Protest!!!</button>
+    }
+    else if (game.State == Game.GameState.Finished)
+    {
+        if (game.Players.Find(x => x.Cards.Count == 0 && x.Name == name) != null)
         {
-            <li>
-              <button @onclick="@(e => PlayCard(item))">@item</button>
-            </li>
+            <h1>You win!</h1>
         }
-    </ul>
-
-    <button class="btn btn-danger" @onclick="Protest">Protest!!!</button>
-}
-else if (game.State == Game.GameState.Finished)
-{
-    if (game.Players.Find(x => x.Cards.Count == 0 && x.Name == name) != null)
-    {
-        <h1>You win!</h1>
+        else
+        {
+            <h2>Game over Loser</h2>
+        }
     }
-    else
-    {
-        <h2>Game over Loser</h2>
-    }
-}
 
-@code {
+    @code {
 
-    [Parameter]
+[Parameter]
     public string gameId { get; set; }
 
     public string name { get; set; }
     public Player player { get; set; }
+    public bool overlay { get; set; }
 
     public Game game;
     HubConnection _connection;
@@ -88,6 +95,12 @@ else if (game.State == Game.GameState.Finished)
 
     private async void PlayCard(int item)
     {
+        this.overlay = true;
+        var timer = new Timer(new TimerCallback(_ =>
+        {
+            this.overlay = false;
+            this.StateHasChanged();
+        }), null, 1000, 0);
         await _connection.InvokeAsync<Game>("PlayCard", this.game.Id, name, player.Cards.Last(), item);
     }
 
@@ -99,11 +112,8 @@ else if (game.State == Game.GameState.Finished)
     {
         Console.WriteLine(game.State);
         this.game = game;
-
-        //if (this.player == null)
         this.player = game.Players.Find(x => x.Name == this.name);
-        Console.WriteLine(this.player);
 
         StateHasChanged();
     }
-}
+    }

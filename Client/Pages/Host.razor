@@ -94,6 +94,7 @@ else if (game.State == Game.GameState.Finished)
 
             NavigationManager.NavigateTo($"host/{gameId}");
         }
+        await _connection.InvokeAsync<Game>("Connect", gameId);
         game = await _connection.InvokeAsync<Game>("LoadGame", gameId);
     }
 

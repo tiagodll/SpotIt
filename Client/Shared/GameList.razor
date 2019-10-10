@@ -1,6 +1,9 @@
-﻿@using Microsoft.Extensions.Primitives
+﻿@using BlazorSignalR
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.Extensions.Primitives
 @using SpotIt.Shared
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 
 <h3>GameList</h3>
 @if (games == null || games.Count == 0)
@@ -20,11 +23,22 @@ else
 @code {
     public List<Game> games { get; set; }
     public string Asd { get; set; }
+    HubConnection _connection;
 
     public string GameUrl(SpotIt.Shared.Game game) => $"{NavigationManager.BaseUri}play/{game.Id}";
 
     protected override async Task OnInitializedAsync()
     {
-        //games = await Http.GetJsonAsync<List<Game>>("api/game");
+        _connection = new HubConnectionBuilder().WithUrlBlazor("/hub", JsRuntime, NavigationManager, options: opt => { }).Build();
+        _connection.On<List<Game>>("GameList", GameListed);
+        await _connection.StartAsync();
+
+        await _connection.InvokeAsync<Game>("ListGames");
+    }
+    protected async Task GameListed(List<Game> games)
+    {
+        this.games = games;
+
+        StateHasChanged();
     }
 }

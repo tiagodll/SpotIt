@@ -27,7 +27,6 @@ namespace SpotIt.Server.Controllers
             else
                 db.Games.Add(game);
 
-            await Groups.AddToGroupAsync(Context.ConnectionId, game.Id);
             await Clients.Groups(game.Id).SendAsync("Refresh", game);
         }
 
@@ -133,5 +132,9 @@ namespace SpotIt.Server.Controllers
             await Clients.Groups(gameId).SendAsync("Refresh", db.Games[gameIndex]);
         }
 
+        public async Task ListGames()
+        {
+            await Clients.All.SendAsync("GameList", db.Games);
+        }
     }
 }
