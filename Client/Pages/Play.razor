@@ -11,7 +11,7 @@
 
 @if (gameId == null || game == null)
 {
-    <GameList></GameList>
+    <p>Do you want to host your own game?</p>
 }
 else if (game.State == Game.GameState.Created && this.player == null)
 {
@@ -77,6 +77,7 @@ else if (game.State == Game.GameState.Finished)
 
         if (!string.IsNullOrWhiteSpace(gameId))
         {
+            await _connection.InvokeAsync<Game>("Connect", gameId);
             await _connection.InvokeAsync<Game>("LoadGame", gameId);
         }
     }

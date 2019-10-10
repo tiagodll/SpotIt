@@ -27,7 +27,8 @@ namespace SpotIt.Server.Controllers
             else
                 db.Games.Add(game);
 
-            await Clients.All.SendAsync("Refresh", game);
+            await Groups.AddToGroupAsync(Context.ConnectionId, game.Id);
+            await Clients.Groups(game.Id).SendAsync("Refresh", game);
         }
 
         public async Task JoinGame(string gameId, string name)
@@ -39,7 +40,9 @@ namespace SpotIt.Server.Controllers
             var player = new Player() {Name = name};
             db.Games[gameIndex].Players.Add(player);
 
-            await Clients.All.SendAsync("Refresh", db.Games[gameIndex]);
+            //await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
+
+            await Clients.Groups(gameId).SendAsync("Refresh", db.Games[gameIndex]);
         }
 
         public async Task PlayCard(string gameId, string name, Card card, int match)
@@ -63,15 +66,20 @@ namespace SpotIt.Server.Controllers
             }
             else
             {
-                await Clients.All.SendAsync("Refresh", db.Games[gameIndex]);
+                await Clients.Groups(gameId).SendAsync("Refresh", db.Games[gameIndex]);
             }
+        }
+
+        public async Task Connect(string gameId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
         }
 
         public async Task LoadGame(string gameId)
         {
             var game = db.Games.Find(x => x.Id == gameId);
-            await Clients.All.SendAsync("Refresh", game);
-            //await Clients.Group(BOT_GROUP).SendAsync("LoadGame", board, Context.ConnectionId);
+
+            await Clients.Groups(gameId).SendAsync("Refresh", game);
         }
 
         public async Task StartGame(string gameId)
@@ -85,7 +93,7 @@ namespace SpotIt.Server.Controllers
 
                 await DealCards(gameId);
 
-                await Clients.All.SendAsync("Refresh", db.Games[gameIndex]);
+                await Clients.Groups(gameId).SendAsync("Refresh", db.Games[gameIndex]);
             }
         }
 
@@ -112,7 +120,7 @@ namespace SpotIt.Server.Controllers
                     .Take(cardsPerPlayer)
                     .ToList();
 
-                await Clients.All.SendAsync("Refresh", db.Games[gameIndex]);
+                await Clients.Groups(gameId).SendAsync("Refresh", db.Games[gameIndex]);
             }
         }
 
@@ -122,7 +130,7 @@ namespace SpotIt.Server.Controllers
             if (gameIndex >= 0)
                 db.Games[gameIndex].State = Game.GameState.Finished;
 
-            await Clients.All.SendAsync("Refresh", db.Games[gameIndex]);
+            await Clients.Groups(gameId).SendAsync("Refresh", db.Games[gameIndex]);
         }
 
     }
