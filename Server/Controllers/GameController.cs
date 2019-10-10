@@ -24,42 +24,42 @@ namespace SpotIt.Server.Controllers
         [HttpGet]
         public List<Game> Get()
         {
-            return db.Rooms;
+            return db.Games;
         }
 
         [HttpGet("{gameId}")]
         public Game Get(string gameId)
         {
-            return db.Rooms.Find(x => x.Id == gameId);
+            return db.Games.Find(x => x.Id == gameId);
         }
 
         [HttpPost]
         public bool Post(Game game)
         {
-            var gameIndex = db.Rooms.FindIndex(x => x.Id == game.Id);
+            var gameIndex = db.Games.FindIndex(x => x.Id == game.Id);
             if (gameIndex >= 0)
-                db.Rooms[gameIndex] = game;
+                db.Games[gameIndex] = game;
             else
-                db.Rooms.Add(game);
+                db.Games.Add(game);
 
             return true;
         }
 
         [HttpPost("{gameId}/join")]
-        public bool Join(string gameId, [FromBody] string player)
+        public bool Join(string gameId, [FromBody] string name)
         {
-            var gameIndex = db.Rooms.FindIndex(x => x.Id == gameId);
+            var gameIndex = db.Games.FindIndex(x => x.Id == gameId);
             if (gameIndex >= 0)
-                db.Rooms[gameIndex].Players.Add(player);
+                db.Games[gameIndex].Players.Add(new Player(){ Name = name});
 
             return true;
         }
         [HttpDelete("{gameId}")]
         public bool Delete(string gameId)
         {
-            var gameIndex = db.Rooms.FindIndex(x => x.Id == gameId);
+            var gameIndex = db.Games.FindIndex(x => x.Id == gameId);
             if (gameIndex >= 0)
-                db.Rooms.RemoveAt(gameIndex);
+                db.Games.RemoveAt(gameIndex);
 
             return true;
         }

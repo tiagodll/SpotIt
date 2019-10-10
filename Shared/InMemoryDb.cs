@@ -7,11 +7,11 @@ namespace SpotIt.Shared
 {
     public class InMemoryDb
     {
-        public List<Game> Rooms;
+        public List<Game> Games;
 
         public InMemoryDb()
         {
-            Rooms = new List<Game>();
+            Games = new List<Game>();
         }
     }
 }

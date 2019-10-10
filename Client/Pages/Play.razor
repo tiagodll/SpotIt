@@ -13,22 +13,49 @@
 {
     <GameList></GameList>
 }
-else if (this.State == Game.GameState.Created)
+else if (game.State == Game.GameState.Created && this.player == null)
 {
     <p>Enter your name</p>
-    <input type="text" @bind="user" />
+    <input type="text" @bind="name" />
     <button @onclick="@JoinGame">join</button>
 }
-else if (this.State == Game.GameState.Joined || this.State == Game.GameState.Started)
+else if (game.State == Game.GameState.Created && this.player != null)
+{
+    <p>Waiting for game to start</p>
+    <p>players:</p>
+    <ul>
+        @foreach (var player in game?.Players)
+        {
+            <li>@player.Name</li>
+        }
+    </ul>
+}
+else if (game.State == Game.GameState.Started)
 {
     <p>Current game: @gameId</p>
 
+    <p>Cards:</p>
+    <ul>
+        @foreach (var item in player.Cards.Last().items)
+        {
+            <li>
+              <button @onclick="@(e => PlayCard(item))">@item</button>
+            </li>
+        }
+    </ul>
+
     <button class="btn btn-danger" @onclick="Protest">Protest!!!</button>
-    <button class="btn btn-primary" @onclick="SelectItem">1</button>
 }
-else if (this.State == Game.GameState.Finished)
+else if (game.State == Game.GameState.Finished)
 {
-    <p>Game over</p>
+    if (game.Players.Find(x => x.Cards.Count == 0 && x.Name == name) != null)
+    {
+        <h1>You win!</h1>
+    }
+    else
+    {
+        <h2>Game over Loser</h2>
+    }
 }
 
 @code {
@@ -36,9 +63,9 @@ else if (this.State == Game.GameState.Finished)
     [Parameter]
     public string gameId { get; set; }
 
-    public string user { get; set; }
+    public string name { get; set; }
+    public Player player { get; set; }
 
-    public Game.GameState State { get; set; }
     public Game game;
     HubConnection _connection;
 
@@ -51,7 +78,6 @@ else if (this.State == Game.GameState.Finished)
         if (!string.IsNullOrWhiteSpace(gameId))
         {
             await _connection.InvokeAsync<Game>("LoadGame", gameId);
-            this.State = Game.GameState.Created;
         }
     }
 
@@ -59,25 +85,23 @@ else if (this.State == Game.GameState.Finished)
     {
     }
 
-    void SelectItem()
+    private async void PlayCard(int item)
     {
+        await _connection.InvokeAsync<Game>("PlayCard", this.game.Id, name, player.Cards.Last(), item);
     }
 
     private async Task JoinGame()
     {
-        await _connection.InvokeAsync<Game>("JoinGame", this.game.Id, user);
-
-        //await Http.SendJsonAsync(HttpMethod.Post, $"/api/game/{gameId}/join", user);
-        //game = await Http.GetJsonAsync<Game>("api/game/" + gameId);
-        this.State = Game.GameState.Joined;
-
-        Console.WriteLine(game);
+        await _connection.InvokeAsync<Game>("JoinGame", this.game.Id, name);
     }
     protected async Task GameLoaded(Game game)
     {
+        Console.WriteLine(game.State);
         this.game = game;
-        if (game.State == Game.GameState.Started || game.State == Game.GameState.Finished)
-            this.State = game.State;
+
+        //if (this.player == null)
+        this.player = game.Players.Find(x => x.Name == this.name);
+        Console.WriteLine(this.player);
 
         StateHasChanged();
     }

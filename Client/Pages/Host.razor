@@ -23,7 +23,7 @@ else if (game.State == Game.GameState.Created)
     <ul>
         @foreach (var player in game?.Players)
         {
-            <li>@player</li>
+            <li>@player.Name</li>
         }
     </ul>
     <button @onclick="@StartGame">start game</button>
@@ -36,24 +36,26 @@ else if (game.State == Game.GameState.Started)
     <ul>
         @foreach (var player in game?.Players)
         {
-            <li>@player</li>
+            <li>@player.Name</li>
         }
     </ul>
-    <button @onclick="@EndGame">Start Game</button>
+
+    <p>Card:</p>
+    <ul>
+        @foreach (var item in card.items)
+        {
+            <li>@item</li>
+        }
+    </ul>
+
+    <button @onclick="@FinishGame">Finish Game</button>
 }
 else if (game.State == Game.GameState.Finished)
 {
     <p>This is the room number: @game.Id .</p>
     <p>Game is finished</p>
 
-    <p>Current players:</p>
-    <ul>
-        @foreach (var player in game?.Players)
-        {
-            <li>@player</li>
-        }
-    </ul>
-    <button @onclick="@FinishGame">Finish Game</button>
+    <h2>Winner: @game.Players.Find(x => x.Cards.Count == 0).Name</h2>
 }
 
 @code {
@@ -62,6 +64,7 @@ else if (game.State == Game.GameState.Finished)
     public string gameId { get; set; }
 
     private HubConnection _connection;
+    private Card card;
 
     Game game;
     string GameUrl => $"{NavigationManager.BaseUri}play/{game.Id}";
@@ -86,6 +89,10 @@ else if (game.State == Game.GameState.Finished)
     protected async Task GameLoaded(Game game)
     {
         this.game = game;
+        if (game.State == Game.GameState.Started)
+        {
+            this.card = game.Cards.Last();
+        }
         StateHasChanged();
     }
 

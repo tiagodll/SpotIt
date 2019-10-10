@@ -13,7 +13,7 @@ namespace SpotIt.Shared
 
         public string Id { get; set; }
 
-        public List<string> Players { get; set; }
+        public List<Player> Players { get; set; }
 
         public List<Card> Cards { get; set; }
 
@@ -28,7 +28,18 @@ namespace SpotIt.Shared
             this.State = GameState.Created;
             this.Date = DateTime.Now;
             this.Id = gameId ?? new Random().Next(0, 999).ToString();
-            this.Players = new List<string>();
+            this.Players = new List<Player>();
+        }
+
+        public void Shuffle()
+        {
+            Random rnd = new Random(); 
+
+            this.Cards = Cards
+                .Select(x => new { value = x, order = rnd.Next() })
+                .OrderBy(x => x.order)
+                .Select(x => x.value)
+                .ToList();
         }
     }
 }
