@@ -41,10 +41,11 @@ else if (game.State == Game.GameState.Started)
     </ul>
 
     <p>Card:</p>
-    <ul class="card">
-        @foreach (var item in card.items)
+    <ul class="spotit-card">
+        @for (var i = 0; i < card.items.Count; i++)
         {
-            <li>@item</li>
+            var clss = card.GetItemClass(card.items.Count, i);
+            <li class="@clss">@card.items[i]</li>
         }
     </ul>
 
@@ -57,17 +58,6 @@ else if (game.State == Game.GameState.Finished)
 
     <h2>Winner: @game.Players.Find(x => x.Cards.Count == 0).Name</h2>
 }
-
-<style>
-    ul.card {
-        columns: 3;
-    }
-    ul.card > li {
-        width: 20px;
-        height: 20px;
-        border: solid green 1px;
-    }
-</style>
 
 @code {
 
@@ -117,4 +107,5 @@ else if (game.State == Game.GameState.Finished)
     {
         await _connection.InvokeAsync<Game>("FinishGame", game.Id);
     }
+
 }

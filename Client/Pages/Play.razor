@@ -38,17 +38,19 @@
     }
     else if (game.State == Game.GameState.Started)
     {
+        var card = player?.Cards.Last();
         <p>Current game: @gameId</p>
 
         <p>Cards:</p>
-        <ul>
-            @foreach (var item in player.Cards.Last().items)
+        <ul class="spotit-card">
+            @for (var i = 0; i < card?.items.Count; i++)
             {
-                <li>
-                    <button @onclick="@(e => PlayCard(item))">@item</button>
-                </li>
+                var clss = card.GetItemClass(card.items.Count, i);
+                var item = card.items[i];
+
+                <li class="@clss" @onclick="@(e => PlayCard(item))">@item</li>
             }
-        </ul>
+</ul>
 
         <button class="btn btn-danger" @onclick="Protest">Protest!!!</button>
     }
@@ -66,54 +68,55 @@
 
     @code {
 
-[Parameter]
-    public string gameId { get; set; }
+        [Parameter]
+        public string gameId { get; set; }
 
-    public string name { get; set; }
-    public Player player { get; set; }
-    public bool overlay { get; set; }
+        public string name { get; set; }
+        public Player player { get; set; }
+        public bool overlay { get; set; }
 
-    public Game game;
-    HubConnection _connection;
+        public Game game;
+        HubConnection _connection;
 
-    protected override async Task OnInitializedAsync()
-    {
-        _connection = new HubConnectionBuilder().WithUrlBlazor("/hub", JsRuntime, NavigationManager, options: opt => { }).Build();
-        _connection.On<Game>("Refresh", GameLoaded);
-        await _connection.StartAsync();
-
-        if (!string.IsNullOrWhiteSpace(gameId))
+        protected override async Task OnInitializedAsync()
         {
-            await _connection.InvokeAsync<Game>("Connect", gameId);
-            await _connection.InvokeAsync<Game>("LoadGame", gameId);
+            _connection = new HubConnectionBuilder().WithUrlBlazor("/hub", JsRuntime, NavigationManager, options: opt => { }).Build();
+            _connection.On<Game>("Refresh", GameLoaded);
+            await _connection.StartAsync();
+
+            if (!string.IsNullOrWhiteSpace(gameId))
+            {
+                await _connection.InvokeAsync<Game>("Connect", gameId);
+                await _connection.InvokeAsync<Game>("LoadGame", gameId);
+            }
         }
-    }
 
-    void Protest()
-    {
-    }
-
-    private async void PlayCard(int item)
-    {
-        this.overlay = true;
-        var timer = new Timer(new TimerCallback(_ =>
+        void Protest()
         {
-            this.overlay = false;
-            this.StateHasChanged();
-        }), null, 1000, 0);
-        await _connection.InvokeAsync<Game>("PlayCard", this.game.Id, name, player.Cards.Last(), item);
-    }
+        }
 
-    private async Task JoinGame()
-    {
-        await _connection.InvokeAsync<Game>("JoinGame", this.game.Id, name);
-    }
-    protected async Task GameLoaded(Game game)
-    {
-        Console.WriteLine(game.State);
-        this.game = game;
-        this.player = game.Players.Find(x => x.Name == this.name);
+        private async void PlayCard(int item)
+        {
+            Console.WriteLine($"played item: {item}");
+            this.overlay = true;
+            var timer = new Timer(new TimerCallback(_ =>
+            {
+                this.overlay = false;
+                this.StateHasChanged();
+            }), null, 1000, System.Threading.Timeout.Infinite);
+            await _connection.InvokeAsync<Game>("PlayCard", this.game.Id, name, player.Cards.Last(), item);
+        }
 
-        StateHasChanged();
-    }
+        private async Task JoinGame()
+        {
+            await _connection.InvokeAsync<Game>("JoinGame", this.game.Id, name);
+        }
+        protected async Task GameLoaded(Game game)
+        {
+            Console.WriteLine(game.State);
+            this.game = game;
+            this.player = game.Players.Find(x => x.Name == this.name);
+
+            StateHasChanged();
+        }
     }

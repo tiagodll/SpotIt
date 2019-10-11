@@ -21,6 +21,85 @@ html, body {
     transition: all 2s ease-in-out;
 }
 
+ul.spotit-card {
+    /*position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;*/
+    background: white;
+}
+
+ul.spotit-card li {
+    border: solid green 1px;
+    display: inline-block;
+    padding: 10px;
+    color: white;
+    background: green;
+}
+ul.spotit-card li.spotit-xl {
+    zoom: 3;
+}
+ul.spotit-card li.spotit-l {
+    zoom: 2.5;
+}
+ul.spotit-card li.spotit-m {
+    zoom: 2;
+}
+ul.spotit-card li.spotit-s {
+    zoom: 1;
+}
+ul.spotit-card li.spotit-xs {
+    zoom: 0.8;
+}
+
+    /*ul.spotit-card li.spotit-icon {
+        position: absolute;
+    }*/
+
+    ul.spotit-card .spotit-card-1.spotit-icon-1 {
+        top: 30vh;
+        left: 40vw;
+    }
+
+    ul.spotit-card .spotit-card-1.spotit-icon-2 {
+        top: 6vh;
+        left: 19vw;
+    }
+
+    ul.spotit-card .spotit-card-1.spotit-icon-3 {
+        top: 61vh;
+        left: 19vw;
+    }
+
+    ul.spotit-card .spotit-card-1.spotit-icon-4 {
+        top: 6vh;
+        left: 26vw;
+    }
+
+    ul.spotit-card .spotit-card-1.spotit-icon-5 {
+        top: 15vh;
+        left: 37vw;
+    }
+
+    ul.spotit-card .spotit-card-1.spotit-icon-6 {
+        top: 41vh;
+        left: 23vw;
+    }
+
+    ul.spotit-card .spotit-card-1.spotit-icon-7 {
+        top: 71vh;
+        left: 57vw;
+    }
+
+    ul.spotit-card .spotit-card-1.spotit-icon-8 {
+        top: 71vh;
+        left: 94vw;
+    }
+
+
+
+
 app {
     position: relative;
     display: flex;

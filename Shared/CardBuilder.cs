@@ -22,6 +22,8 @@ namespace SpotIt.Shared
                 {
                     card.items.Add((itemsPerCard - 1) + (itemsPerCard - 1) * (i - 1) + (j + 1));
                 }
+
+                card.items = Shuffle(card.items);
                 cards.Add(card);
             }
 
@@ -36,10 +38,20 @@ namespace SpotIt.Shared
                     {
                         card.items.Add((itemsPerCard + 1) + (itemsPerCard - 1) * (k - 1) + (((i - 1) * (k - 1) + (j - 1))) % (itemsPerCard - 1));
                     }
+
+                    card.items = Shuffle(card.items);
                     cards.Add(card);
                 }
             }
             return cards;
         }
+
+        private Random rnd = new Random();
+
+        public List<int> Shuffle(List<int> lst) => lst
+                .Select(x => new { value = x, order = rnd.Next() })
+                .OrderBy(x => x.order)
+                .Select(x => x.value)
+                .ToList();
     }
 }
