@@ -8,7 +8,7 @@ namespace SpotIt.Server.Controllers
 {
     public class GameHub : Hub
     {
-        private readonly int CARDS_PER_GAME = 5;
+        private readonly int SYMBOLS_PER_CARD = 8;
         private readonly InMemoryDb db;
         public GameHub(InMemoryDb db)
         {
@@ -38,8 +38,6 @@ namespace SpotIt.Server.Controllers
 
             var player = new Player() {Name = name};
             db.Games[gameIndex].Players.Add(player);
-
-            //await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
 
             await Clients.Groups(gameId).SendAsync("Refresh", db.Games[gameIndex]);
         }
@@ -87,7 +85,7 @@ namespace SpotIt.Server.Controllers
             if (gameIndex >= 0)
             {
                 db.Games[gameIndex].State = Game.GameState.Started;
-                db.Games[gameIndex].Cards = new CardBuilder().MakeCards(CARDS_PER_GAME);
+                db.Games[gameIndex].Cards = new CardBuilder().MakeCards(SYMBOLS_PER_CARD);
                 db.Games[gameIndex].Shuffle();
 
                 await DealCards(gameId);

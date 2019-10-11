@@ -7,27 +7,39 @@ namespace SpotIt.Shared
 {
     public class CardBuilder
     {
-        public List<Card> MakeCards(int size)
+        //based on https://www.ryadel.com/en/dobble-spot-it-algorithm-math-function-javascript/amp/
+
+        public List<Card> MakeCards(int itemsPerCard)
         {
             var cards = new List<Card>();
 
-            for (var i = 0; i <= size; i++)
-                cards.Add(MakeCard(cards, size, i));
+            // Generate cards from 1 to N
+            for (var i = 0; i <itemsPerCard; i++)
+            {
+                var card = new Card();
+                card.items.Add(1);
+                for (var j = 1; j < itemsPerCard; j++)
+                {
+                    card.items.Add((itemsPerCard - 1) + (itemsPerCard - 1) * (i - 1) + (j + 1));
+                }
+                cards.Add(card);
+            }
 
+            // Generate cards from N+1 to N+(N-1)*(N-1)
+            for (var i = 1; i < itemsPerCard; i++)
+            {
+                for (var j = 1; j < itemsPerCard; j++)
+                {
+                    var card = new Card();
+                    card.items.Add(i + 1);
+                    for (var k = 1; k <itemsPerCard; k++)
+                    {
+                        card.items.Add((itemsPerCard + 1) + (itemsPerCard - 1) * (k - 1) + (((i - 1) * (k - 1) + (j - 1))) % (itemsPerCard - 1));
+                    }
+                    cards.Add(card);
+                }
+            }
             return cards;
         }
-
-        public Card MakeCard(List<Card> cards, int size, int row)
-        {
-            var card = new Card();
-            for (var i = 0; i < size; i++)
-            {
-                card.items.Add(i < row ? cards[i].items[row - 1] : CalculateCardItem(size, row, i));
-            }
-            return card;
-        }
-        private int CalculateCardItem(int size, int row, int i) => i + 1 + (row * size) - CalculateOffset(row);
-
-        private int CalculateOffset(int row) => row == 0 ? 0 : Enumerable.Range(1, row).Aggregate((x, y) => x + y);
     }
 }
